@@ -20,6 +20,7 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -47,3 +48,46 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Data files (keep structure, ignore data)
+data/raw/*.csv
+data/processed/*.csv
+data/external/*
+data/interim/*
+!data/*/.gitkeep
+
+# Models
+models/*.rds
+models/*.txt
+models/*.csv
+models/*.pkl
+!models/.gitkeep
+
+# Reports
+reports/*.html
+reports/*.pdf
+reports/figures/*.png
+reports/figures/*.jpg
+reports/figures/*.jpeg
+!reports/.gitkeep
+!reports/figures/.gitkeep
+
+# Python (if using reticulate)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,199 @@
+---
+title: "Titanic Dataset - Initial Data Exploration"
+author: "MLOps-GHA-R"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(knitr)
+library(ggplot2)
+```
+
+# Introduction
+
+This notebook explores the Titanic dataset to understand the factors that influenced passenger survival during the Titanic disaster.
+
+# Load Data
+
+```{r load-data}
+# Load processed data
+titanic_data <- read_csv("../data/processed/titanic_processed.csv") %>%
+  mutate(
+    Survived = factor(Survived, levels = c("No", "Yes")),
+    Pclass = factor(Pclass),
+    Sex = factor(Sex),
+    Embarked = factor(Embarked)
+  )
+
+# Display first few rows
+head(titanic_data) %>% kable()
+```
+
+# Dataset Overview
+
+```{r overview}
+# Dataset dimensions
+cat("Dataset dimensions:", nrow(titanic_data), "rows x", ncol(titanic_data), "columns\n\n")
+
+# Dataset structure
+str(titanic_data)
+
+# Summary statistics
+summary(titanic_data)
+```
+
+# Survival Analysis
+
+## Overall Survival Rate
+
+```{r overall-survival}
+survival_counts <- table(titanic_data$Survived)
+survival_prop <- prop.table(survival_counts)
+
+cat("Survival counts:\n")
+print(survival_counts)
+cat("\nSurvival proportions:\n")
+print(survival_prop)
+
+ggplot(titanic_data, aes(x = Survived, fill = Survived)) +
+  geom_bar() +
+  scale_fill_manual(values = c("No" = "#e74c3c", "Yes" = "#2ecc71")) +
+  labs(title = "Overall Survival Distribution",
+       y = "Count") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+## Survival by Gender
+
+```{r survival-gender}
+# Cross-tabulation
+gender_survival <- table(titanic_data$Sex, titanic_data$Survived)
+cat("Survival by Gender:\n")
+print(gender_survival)
+cat("\nProportions:\n")
+print(prop.table(gender_survival, margin = 1))
+
+ggplot(titanic_data, aes(x = Sex, fill = Survived)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("No" = "#e74c3c", "Yes" = "#2ecc71")) +
+  labs(title = "Survival Rate by Gender",
+       y = "Proportion") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+## Survival by Passenger Class
+
+```{r survival-class}
+# Cross-tabulation
+class_survival <- table(titanic_data$Pclass, titanic_data$Survived)
+cat("Survival by Passenger Class:\n")
+print(class_survival)
+cat("\nProportions:\n")
+print(prop.table(class_survival, margin = 1))
+
+ggplot(titanic_data, aes(x = Pclass, fill = Survived)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("No" = "#e74c3c", "Yes" = "#2ecc71")) +
+  labs(title = "Survival Rate by Passenger Class",
+       y = "Proportion") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+## Survival by Age
+
+```{r survival-age}
+# Age statistics by survival
+age_stats <- titanic_data %>%
+  group_by(Survived) %>%
+  summarise(
+    Mean_Age = mean(Age, na.rm = TRUE),
+    Median_Age = median(Age, na.rm = TRUE),
+    SD_Age = sd(Age, na.rm = TRUE)
+  )
+
+cat("Age statistics by survival:\n")
+print(age_stats)
+
+ggplot(titanic_data, aes(x = Age, fill = Survived)) +
+  geom_histogram(bins = 30, alpha = 0.7, position = "identity") +
+  scale_fill_manual(values = c("No" = "#e74c3c", "Yes" = "#2ecc71")) +
+  labs(title = "Age Distribution by Survival",
+       x = "Age",
+       y = "Count") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+## Survival by Fare
+
+```{r survival-fare}
+# Fare statistics by survival
+fare_stats <- titanic_data %>%
+  group_by(Survived) %>%
+  summarise(
+    Mean_Fare = mean(Fare, na.rm = TRUE),
+    Median_Fare = median(Fare, na.rm = TRUE),
+    SD_Fare = sd(Fare, na.rm = TRUE)
+  )
+
+cat("Fare statistics by survival:\n")
+print(fare_stats)
+
+ggplot(titanic_data, aes(x = Survived, y = Fare, fill = Survived)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("No" = "#e74c3c", "Yes" = "#2ecc71")) +
+  labs(title = "Fare Distribution by Survival",
+       y = "Fare") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+# Multivariate Analysis
+
+## Gender and Class
+
+```{r gender-class}
+ggplot(titanic_data, aes(x = Pclass, fill = Survived)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~Sex) +
+  scale_fill_manual(values = c("No" = "#e74c3c", "Yes" = "#2ecc71")) +
+  labs(title = "Survival Rate by Class and Gender",
+       y = "Proportion") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+## Age and Class
+
+```{r age-class}
+ggplot(titanic_data, aes(x = Pclass, y = Age, fill = Survived)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("No" = "#e74c3c", "Yes" = "#2ecc71")) +
+  labs(title = "Age Distribution by Class and Survival",
+       x = "Passenger Class",
+       y = "Age") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+# Conclusions
+
+Key findings from the exploratory analysis:
+
+1. **Gender**: Females had a significantly higher survival rate than males
+2. **Passenger Class**: First-class passengers had better survival rates than those in second and third class
+3. **Age**: Younger passengers generally had better survival rates
+4. **Fare**: Higher fares (associated with higher class) correlated with better survival
+5. **Interaction Effects**: The combination of gender and class had a strong influence on survival probability
+
+These insights will guide the feature engineering and model selection for the predictive model.

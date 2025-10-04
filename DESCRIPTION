@@ -1,0 +1,27 @@
+Package: MLOpsGHAR
+Type: Project
+Title: MLOps with GitHub Actions for R
+Version: 1.0.0
+Authors@R: 
+    person("Korkrid Kyle", "Akepanidtaworn", , "korkrid@example.com", role = c("aut", "cre"))
+Description: A machine learning operations project using R with GitHub Actions,
+    following the Cookiecutter Data Science structure. Includes MLflow integration
+    for experiment tracking and model management using the Titanic dataset as an example.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends:
+    R (>= 4.0.0)
+Imports:
+    mlflow (>= 2.0.0),
+    tidyverse (>= 1.3.0),
+    caret (>= 6.0-90),
+    randomForest (>= 4.6-14),
+    ggplot2 (>= 3.3.0),
+    dplyr (>= 1.0.0),
+    readr (>= 2.0.0),
+    carrier (>= 0.1.0)
+Suggests:
+    knitr (>= 1.30),
+    rmarkdown (>= 2.10),
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr

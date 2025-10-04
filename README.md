@@ -171,3 +171,7 @@ make clean        # Remove generated files
 ## License
 
 MIT License - see the [LICENSE](LICENSE) file for details
+
+Thank you for your kind support 🙏
+
+[![Star History Chart](https://api.star-history.com/svg?repos=korkridake/MLOps-GHA-R&type=Date)](https://star-history.com/#korkridake/MLOps-GHA-R&Date)

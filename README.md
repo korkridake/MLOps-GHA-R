@@ -35,20 +35,21 @@ A machine learning operations project using R with GitHub Actions, following the
 │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
 │       └── visualize.R
 │
-└── renv.lock          <- The requirements file for reproducing the R environment
+└── DESCRIPTION        <- R package dependencies and project metadata
 ```
 
 ## Getting Started
+
+### Quick Start
+
+See [QUICKSTART.md](QUICKSTART.md) for detailed installation and usage instructions.
 
 ### Prerequisites
 
 - R (>= 4.0.0)
 - RStudio (recommended)
-- Required R packages:
-  - mlflow
-  - tidyverse
-  - caret
-  - randomForest
+- Make (optional, for convenience commands)
+- Required R packages (see [DESCRIPTION](DESCRIPTION))
 
 ### Installation
 
@@ -59,31 +60,54 @@ cd MLOps-GHA-R
 ```
 
 2. Install required R packages:
-```R
-install.packages(c("mlflow", "tidyverse", "caret", "randomForest"))
+```bash
+# Automated setup
+Rscript setup.R
+
+# Or manually in R
+install.packages(c("mlflow", "tidyverse", "caret", "randomForest", "carrier"))
 ```
 
 ### Usage
 
+#### Run the Complete Pipeline
+
+```bash
+# Using Make
+make pipeline
+
+# Or directly
+Rscript main.R
+```
+
+#### Run Individual Steps
+
 1. **Data Preparation**: Process the Titanic dataset
-```R
-source("src/data/make_dataset.R")
+```bash
+make data  # or: Rscript src/data/make_dataset.R
 ```
 
 2. **Model Training**: Train a Random Forest model with MLflow tracking
-```R
-source("src/models/train_model.R")
+```bash
+make train  # or: Rscript src/models/train_model.R
 ```
 
 3. **Model Prediction**: Make predictions using the trained model
-```R
-source("src/models/predict_model.R")
+```bash
+make predict  # or: Rscript src/models/predict_model.R
 ```
 
-4. **View MLflow UI**: View experiment tracking results
+4. **Visualization**: Generate plots and visualizations
 ```bash
-mlflow ui
+make visualize  # or: Rscript src/visualization/visualize.R
 ```
+
+5. **View MLflow UI**: View experiment tracking results
+```bash
+make mlflow  # or: mlflow ui
+```
+
+Then navigate to http://localhost:5000
 
 ## MLflow Integration
 
@@ -110,6 +134,39 @@ The project includes an example using the Titanic dataset to predict passenger s
 - Number of parents/children aboard
 - Fare
 - Port of embarkation
+
+For more details, see the [Data Dictionary](references/data_dictionary.md).
+
+## Documentation
+
+- **[Quick Start Guide](QUICKSTART.md)**: Get up and running quickly
+- **[MLflow Integration Guide](references/mlflow_guide.md)**: Learn how to use MLflow for experiment tracking
+- **[Data Dictionary](references/data_dictionary.md)**: Understand the Titanic dataset
+- **[Contributing Guide](CONTRIBUTING.md)**: Contribute to the project
+
+## Project Features
+
+- ✅ **Cookiecutter Data Science Structure**: Organized, standardized project layout
+- ✅ **MLflow Integration**: Complete experiment tracking and model management
+- ✅ **Reproducible Pipeline**: End-to-end ML pipeline with clear steps
+- ✅ **Data Visualization**: Automated generation of exploratory plots
+- ✅ **Model Training**: Random Forest classification with hyperparameter tracking
+- ✅ **R Markdown Notebooks**: Interactive data exploration
+- ✅ **GitHub Actions**: CI/CD workflow for automated training
+- ✅ **Make Commands**: Convenient shortcuts for common tasks
+
+## Available Make Commands
+
+```bash
+make setup        # Install required R packages
+make data         # Prepare the Titanic dataset
+make train        # Train the model with MLflow tracking
+make predict      # Make predictions using trained model
+make visualize    # Create visualizations
+make pipeline     # Run the complete ML pipeline
+make mlflow       # Start MLflow UI
+make clean        # Remove generated files
+```
 
 ## License
 
